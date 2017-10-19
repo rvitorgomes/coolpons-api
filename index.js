@@ -36,7 +36,7 @@ app.use('/', api);
 
 app.set("env", process.env.NODE_ENV || "development");
 app.set("host", process.env.HOST || "0.0.0.0");
-app.set("port", process.env.PORT || 8080);
+app.set("port", process.env.PORT || 4200);
 
 app.listen(app.get("port"), function () {
     console.log('\n' + '**********************************');
