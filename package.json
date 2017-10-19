@@ -1,0 +1,21 @@
+{
+  "name": "eng2017-api",
+  "version": "0.0.0",
+  "license": "MIT",
+  "engines": {
+    "node": "8.5.0",
+    "npm": "4.2.0"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "private": true,
+  "dependencies": {
+    "body-parser": "^1.18.1",
+    "core-js": "^2.4.1",
+    "express": "^4.15.4",
+    "express-promise-router": "^2.0.0",
+    "morgan": "^1.8.2",
+    "pg": "7.3.0"
+  }
+}
