@@ -2,7 +2,7 @@ const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const cors= require('cors');
-const api = require('./api/index');
+const api = require('./server/routes/index');
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -36,7 +36,7 @@ app.use('/', api);
 
 app.set("env", process.env.NODE_ENV || "development");
 app.set("host", process.env.HOST || "0.0.0.0");
-app.set("port", process.env.PORT || 3000);
+app.set("port", process.env.PORT || 8080);
 
 app.listen(app.get("port"), function () {
     console.log('\n' + '**********************************');
