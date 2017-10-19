@@ -2,10 +2,9 @@ const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const cors= require('cors');
-const api = require('./server/routes/index');
 const app = express();
 
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
 
 // parse application/json
@@ -27,8 +26,8 @@ app.use(function(req, res, next) {
 // API Queries
 //////////////////
 
-app.use('/', api);
-
+const mountRoutes = require('./server/routes');
+mountRoutes(app);
 
 //////////////////
 // Server Setup
@@ -36,7 +35,7 @@ app.use('/', api);
 
 app.set("env", process.env.NODE_ENV || "development");
 app.set("host", process.env.HOST || "0.0.0.0");
-app.set("port", process.env.PORT || 4200);
+app.set("port", process.env.PORT || 3000);
 
 app.listen(app.get("port"), function () {
     console.log('\n' + '**********************************');
