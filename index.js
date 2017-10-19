@@ -1,15 +1,21 @@
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
-const app = express();
 const cors= require('cors');
-const mountRoutes = require('./server/routes');
+const api = require('./api/index');
+const app = express();
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
+// parse application/json
+app.use(bodyParser.json());
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// CORS
+// This allows client applications from other domains use the API Server
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -17,27 +23,60 @@ app.use(function(req, res, next) {
 });
 
 
-mountRoutes(app);
+//////////////////
+// API Queries
+//////////////////
+
+app.use('/', api);
+
+
+//////////////////
+// Server Setup
+//////////////////
+
+app.set("env", process.env.NODE_ENV || "development");
+app.set("host", process.env.HOST || "0.0.0.0");
+app.set("port", process.env.PORT || 3000);
+
+app.listen(app.get("port"), function () {
+    console.log('\n' + '**********************************');
+    console.log('REST API listening on port ' + app.get("port"));
+    console.log('**********************************' + '\n');
+});
+
+
+////////////////////
+// Error Handlers
+////////////////////
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-	var err = new Error('Not Found');
-	err.status = 404;
-	next(err);
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
-  // error handler
-  app.use(function(err, req, res, next) {
-	// set locals, only providing error in development
-	res.locals.message = err.message;
-	res.locals.error = req.app.get('env') === 'development' ? err : {};
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+    app.use(function(err, req, res, next) {
+        res.status( err.code || 500 )
+        .json({
+            status: 'error',
+            message: err
+        });
+    });
+}
 
-	// render the error page
-	res.status(err.status || 500);
-	res.render('error');
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+    res.status(err.status || 500)
+    .json({
+        status: 'error',
+        message: err.message
+    });
 });
 
-app.listen(process.env.PORT || 8080);
-
-console.log('Server Listening!');
 
 module.exports = app;
