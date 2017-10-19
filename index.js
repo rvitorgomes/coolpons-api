@@ -8,9 +8,12 @@ const mountRoutes = require('./server/routes');
 mountRoutes(app);
 
 app.use(logger('dev'));
-app.use(cors.permission);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors.permission);
+app.use(cors({
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
 app.listen(process.env.PORT || 8080);
 
 console.log('Server Listening!');
