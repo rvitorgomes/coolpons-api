@@ -11,7 +11,13 @@ const router = new Router();
 module.exports = router;
 
 router.get('/', async (req, res) => {
-	const { id } = req.params
 	const { rows } = await db.query('SELECT * FROM produtos')
 	res.send(rows)
-})
+});
+
+router.get('/:id', async (req, res) => {
+	const { id } = req.params;
+	const { rows } = await db.query('SELECT * FROM produtos WHERE cod_prod = $1', [id]);
+	res.send(rows[0]);
+});
+

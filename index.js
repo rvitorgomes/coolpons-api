@@ -9,9 +9,9 @@ app.use(logger('dev'));
 
 // parse application/json
 app.use(bodyParser.json());
-
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.text());
+app.use(bodyParser.json({ type: 'application/json'}));
 
 // CORS
 // This allows client applications from other domains use the API Server
