@@ -31,3 +31,11 @@ router.post('/', async (req, res) => {
 	return res.send(rows);
 });
 
+// GET product
+router.post('/search', async (req, res) => {
+	const { query } = req.body;
+	const { rows } = await db.query('SELECT * FROM products WHERE name LIKE $1', [query]);
+	return res.send(rows);
+});
+
+
