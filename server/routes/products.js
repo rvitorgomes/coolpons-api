@@ -50,19 +50,3 @@ router.post('/search', async (req, res) => {
 
 	return res.send(rows);
 });
-
-// GET product BY COMPANY
-router.post('/company', async (req, res) => {
-	const { company_id } = req.body;
-
-	const { rows } = await db.query('SELECT * FROM products WHERE company =  $1', [company_id]);
-	return res.send(rows);
-});
-
-// GET product BY COMPANY
-router.post('/price', async (req, res) => {
-	const { price } = req.body;
-
-	const { rows } = await db.query('SELECT * FROM products WHERE price <= $1', [price]);
-	return res.send(rows);
-});
