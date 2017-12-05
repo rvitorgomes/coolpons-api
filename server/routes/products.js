@@ -33,9 +33,36 @@ router.post('/', async (req, res) => {
 
 // GET product
 router.post('/search', async (req, res) => {
-	const { query } = req.body;
-	const { rows } = await db.query('SELECT * FROM products WHERE name LIKE $1', [query]);
+	const { query, company, price } = req.body;
+
+	let string_query = `SELECT * FROM products `;
+	if (query)
+		string_query = string_query + `WHERE name LIKE '%${query}%' `;
+	if (!query)
+		string_query = string_query + `WHERE name = '%' `;
+	if (company)
+		string_query = string_query + `AND company = ${company} `;
+	if (price)
+		string_query = string_query + `AND price <= ${price}`;
+
+	console.log(string_query);
+	const { rows } = await db.query(string_query);
+
 	return res.send(rows);
 });
 
+// GET product BY COMPANY
+router.post('/company', async (req, res) => {
+	const { company_id } = req.body;
 
+	const { rows } = await db.query('SELECT * FROM products WHERE company =  $1', [company_id]);
+	return res.send(rows);
+});
+
+// GET product BY COMPANY
+router.post('/price', async (req, res) => {
+	const { price } = req.body;
+
+	const { rows } = await db.query('SELECT * FROM products WHERE price <= $1', [price]);
+	return res.send(rows);
+});
